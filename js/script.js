@@ -1,8 +1,10 @@
 'use strict';
 
 function titleClickHandler(){
-  console.log('Link was clicked!')
-  console.log(event);
+  event.preventDefault(); // Prevent default link behavior - zapobiega domyślnemu zachowaniu linku, czyli przeładowaniu strony
+  const clickedElement = this; // 'this' refers to the clicked link - 'this' może być użyte do odwołania się do elementu, który wywołał zdarzenie
+  console.log('Link was clicked!') // Log a message to the console when a link is clicked
+  console.log(event); // Log the event object - rejestrator zdarzenia :)
 
   /* remove class 'active' from all article links  */
   const activeLinks = document.querySelectorAll('.titles a.active');
@@ -10,7 +12,8 @@ function titleClickHandler(){
     activeLink.classList.remove('active');
   }
   /* add class 'active' to the clicked link */
-
+  console.log('clickedElement:', clickedElement);
+  clickedElement.classList.add('active');
   /* remove class 'active' from all articles */
   const activeArticles = document.querySelectorAll('.post.active');
   for(let activeArticle of activeArticles){
