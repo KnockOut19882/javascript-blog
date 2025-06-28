@@ -3,7 +3,7 @@
 function titleClickHandler(){ // Function to handle click events on article links - funkcja obsługująca kliknięcia w linki artykułów
   event.preventDefault(); // Prevent default link behavior - zapobiega domyślnemu zachowaniu linku, czyli przeładowaniu strony
   const clickedElement = this; // 'this' refers to the clicked link - 'this' może być użyte do odwołania się do elementu, który wywołał zdarzenie
-  console.log('Link was clicked!') // Log a message to the console when a link is clicked
+  console.log('Link was clicked!') // Log a message to the console when a link is clicked - rejestrator kliknięcia linku
   console.log(event); // Log the event object - rejestrator zdarzenia :)
 
   /* remove class 'active' from all article links  */
@@ -30,8 +30,37 @@ function titleClickHandler(){ // Function to handle click events on article link
   console.log('targetArticle.classList:', targetArticle.classList); // Log the class list of the target article - rejestrator listy klas docelowego artykułu
 }
 
-const links = document.querySelectorAll('.titles a');
-
-for(let link of links){
-  link.addEventListener('click', titleClickHandler);
+const links = document.querySelectorAll('.titles a'); // Select all links in the title list - wybiera wszystkie linki w liście tytułów
+for(let link of links){ // Loop through each link - iteruje przez każdy link
+  link.addEventListener('click', titleClickHandler); // Add a click event listener to each link - dodaje nasłuchiwanie zdarzenia kliknięcia do każdego linku
+  // link.addEventListener('click', function(event){titleClickHandler(event);}); // Alternative way to add the event listener - alternatywny sposób dodania nasłuchiwania zdarzenia
 }
+
+const optArticleSelector = '.post', // Selector for articles - selektor dla artykułów
+  optTitleSelector = '.post-title', // Selector for article titles - selektor dla tytułów artykułów
+  optTitleListSelector = '.titles'; // Selector for the title list - selektor dla listy tytułów
+
+function generateTitleLinks(){
+  console.log('generateTitleLinks function called'); // Log a message to indicate the function has been called - rejestrator wywołania funkcji
+  const titleList = document.querySelector(optTitleListSelector); // Select the title list element - wybiera element listy tytułów
+  
+  /* remove contents of titleList */
+  function clearMessages(){ // Function to clear the contents of the messages element - funkcja do czyszczenia zawartości elementu wiadomości
+	document.getElementById('messages').innerHTML = ''; // Clear the contents of the messages element - czyści zawartość elementu wiadomości
+}
+  titleList.innerHTML = ''; // Clear the contents of the title list - czyści zawartość listy tytułów
+  /* for each article */
+
+    /* get the article id */
+
+    /* find the title element */
+
+    /* get the title from the title element */
+
+    /* create HTML of the link */
+
+    /* insert link into titleList */
+
+}
+
+generateTitleLinks();
