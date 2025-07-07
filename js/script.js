@@ -29,29 +29,45 @@ function titleClickHandler(event){ // Function to handle click events on article
   targetArticle.classList.add('active'); // Add the 'active' class to the target article - dodaje klasę 'active' do docelowego artykułu
   console.log('targetArticle.classList:', targetArticle.classList); // Log the class list of the target article - rejestrator listy klas docelowego artykułu
 }
-  const links = document.querySelectorAll('.titles a'); // Select all links in the title list - wybiera wszystkie linki w liście tytułów
-  for(let link of links){ // Loop through each link - iteruje przez każdy link
-    link.addEventListener('click', titleClickHandler); // Add a click event listener to each link - dodaje nasłuchiwanie zdarzenia kliknięcia do każdego linku
-    // link.addEventListener('click', function(event){titleClickHandler(event);}); // Alternative way to add the event listener - alternatywny sposób dodania nasłuchiwania zdarzenia
-}
 
 const optArticleSelector = '.post', // Selector for articles - selektor dla artykułów
   optTitleSelector = '.post-title', // Selector for article titles - selektor dla tytułów artykułów
   optTitleListSelector = '.titles'; // Selector for the title list - selektor dla listy tytułów
 
-
+/* generateTitleLinks function */
+function generateTitleLinks(){ // Function to generate a list of article titles with links - funkcja generująca listę tytułów artykułów z linkami
+  console.log('generateTitleLinks function called'); // Log a message to the console when the function is called - rejestrator wywołania funkcji generateTitleLinks
   /* remove contents of titleList */
   document.querySelector(optTitleListSelector).innerHTML = ''; // Clear the title list by setting its inner HTML to an empty string - czyści listę tytułów, ustawiając jej wewnętrzny HTML na pusty ciąg
+  const titleList = document.querySelector(optTitleListSelector); // Select the title list element - wybiera element listy tytułów
+  /* find all the articles and save them to variable: articles */
+  let html = ''; // Initialize an empty string to hold the HTML for the title links - inicjalizuje pusty ciąg do przechowywania HTML dla linków tytułów
+  const articles = document.querySelectorAll(optArticleSelector); // Select all articles using the defined selector - wybiera wszystkie artykuły za pomocą zdefiniowanego selektora
   /* for each article */
-  
+  for (let article of articles){ // Loop through each article - iteruje przez każdy artykuł}
     /* get the article id */
-
+    const articleId = article.getAttribute('id'); // Get the 'id' attribute of the article - pobiera atrybut 'id' artykułu
     /* find the title element */
-
+    const titleElement = article.querySelector(optTitleSelector); // Select the title element within the article - wybiera element tytułu wewnątrz artykułu
     /* get the title from the title element */
-
+    const articleTitle = titleElement.innerHTML; // Get the inner HTML of the title element - pobiera wewnętrzny HTML elementu tytułu
     /* create HTML of the link */
-
+    const linkHTML = `<li><a href="#${articleId}"><span>${articleTitle}</span></a></li>`; // Create a link HTML string with the article ID and title - tworzy ciąg HTML linku z ID artykułu i tytułem
     /* insert link into titleList */
+    document.querySelector(optTitleListSelector).insertAdjacentHTML('beforeend', linkHTML); // Insert the link HTML into the title list - wstawia HTML linku do listy tytułów
+    /* insert link into html variable */
+    html = html + linkHTML;
+    console.log('html:', html); // Log the generated HTML to the console - rejestrator wygenerowanego HTML
 
-    
+  }
+  titleList.innerHTML = html; // Set the inner HTML of the title list to the generated HTML - ustawia wewnętrzny HTML listy tytułów na wygenerowany HTML
+  
+  const links = document.querySelectorAll('.titles a'); // Select all links in the title list - wybiera wszystkie linki w liście tytułów
+  console.log('links:', links); // Log the selected links to the console - rejestrator wybranych linków
+  for(let link of links){ // Loop through each link - iteruje przez każdy link
+    link.addEventListener('click', titleClickHandler); // Add a click event listener to each link - dodaje nasłuchiwanie zdarzenia kliknięcia do każdego linku
+  }
+}
+/* execute the function */
+generateTitleLinks(); // Call the function to generate the title links - wywołuje funkcję generateTitleLinks
+
