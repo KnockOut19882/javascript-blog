@@ -74,9 +74,23 @@ function generateTitleLinks(){
 generateTitleLinks();
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Add event listener to the title list to handle clicks on article links
-const links = document.querySelectorAll('.titles a'); // Select all links in the title list - wybiera wszystkie linki w liście tytułów
-for(let link of links){ // Loop through each link - iteruje przez każdy link 
-  link.addEventListener('click', titleClickHandler); // Add a click event listener to each link - dodaje nasłuchiwanie zdarzenia kliknięcia do każdego linku
-  // link.addEventListener('click', function(event){titleClickHandler(event);}); // Alternative way to add the event listener - alternatywny sposób dodania nasłuchiwania zdarzenia
+const links = document.querySelectorAll('.titles a'); // Select all links in the title list
+for(let link of links){ // Loop through each link
+  link.addEventListener('click', titleClickHandler); // Add a click event listener to each link
+  // link.addEventListener('click', function(event){titleClickHandler(event);}); // Alternative way to add the event listener
 }
