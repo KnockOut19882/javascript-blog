@@ -28,12 +28,13 @@ function titleClickHandler(){ // Function to handle click events on article link
   /* add class 'active' to the correct article */
   targetArticle.classList.add('active'); // Add the 'active' class to the target article - dodaje klasę 'active' do docelowego artykułu
   console.log('targetArticle.classList:', targetArticle.classList); // Log the class list of the target article - rejestrator listy klas docelowego artykułu
-}
+
 
 const links = document.querySelectorAll('.titles a'); // Select all links in the title list - wybiera wszystkie linki w liście tytułów
 for(let link of links){ // Loop through each link - iteruje przez każdy link
   link.addEventListener('click', titleClickHandler); // Add a click event listener to each link - dodaje nasłuchiwanie zdarzenia kliknięcia do każdego linku
   // link.addEventListener('click', function(event){titleClickHandler(event);}); // Alternative way to add the event listener - alternatywny sposób dodania nasłuchiwania zdarzenia
+}
 }
 
 const optArticleSelector = '.post', // Selector for articles - selektor dla artykułów
@@ -43,24 +44,39 @@ const optArticleSelector = '.post', // Selector for articles - selektor dla arty
 function generateTitleLinks(){
   console.log('generateTitleLinks function called'); // Log a message to indicate the function has been called - rejestrator wywołania funkcji
   const titleList = document.querySelector(optTitleListSelector); // Select the title list element - wybiera element listy tytułów
-  
+}
   /* remove contents of titleList */
   function clearMessages(){ // Function to clear the contents of the messages element - funkcja do czyszczenia zawartości elementu wiadomości
 	document.getElementById('messages').innerHTML = ''; // Clear the contents of the messages element - czyści zawartość elementu wiadomości
 }
-  titleList.innerHTML = ''; // Clear the contents of the title list - czyści zawartość listy tytułów
+  
   /* for each article */
-
+  const articles = document.querySelectorAll(optArticleSelector); // Select all articles - wybiera wszystkie artykuły
+  for(let article of articles){ // Loop through each article - iteruje przez każdy artykuł
+    console.log('article:', article); // Log the current article to the console - rejestrator bieżącego artykułu
     /* get the article id */
-
+    const articleId = article.getAttribute('id'); // Get the value of the 'id' attribute from the article - pobiera wartość atrybutu 'id' z artykułu
+    console.log('articleId:', articleId); // Log the article id to the console - rejestrator id artykułu
     /* find the title element */
-
+    const titleElement = article.querySelector(optTitleSelector); // Select the title element within the article - wybiera element tytułu w artykule
+    console.log('titleElement:', titleElement); // Log the title element to the console - rejestrator elementu tytułu
     /* get the title from the title element */
-
+    const articleTitle = titleElement.innerHTML; // Get the inner HTML of the title element - pobiera wewnętrzny HTML elementu tytułu
+    console.log('articleTitle:', articleTitle); // Log the article title to the console - rejestrator tytułu artykułu
     /* create HTML of the link */
-
+    const linkHTML = `<li><a href="#${articleId}"><span>${articleTitle}</span></a></li>`; // Create the HTML for the link - tworzy HTML dla linku
+    console.log('linkHTML:', linkHTML); // Log the link HTML to the console - rejestrator HTML linku
     /* insert link into titleList */
-
+    titleList.insertAdjacentHTML('beforeend', linkHTML); // Insert the link HTML into the title list - wstawia HTML linku do listy tytułów
+    
 }
 
 generateTitleLinks();
+
+
+// Add event listener to the title list to handle clicks on article links
+const links = document.querySelectorAll('.titles a'); // Select all links in the title list - wybiera wszystkie linki w liście tytułów
+for(let link of links){ // Loop through each link - iteruje przez każdy link 
+  link.addEventListener('click', titleClickHandler); // Add a click event listener to each link - dodaje nasłuchiwanie zdarzenia kliknięcia do każdego linku
+  // link.addEventListener('click', function(event){titleClickHandler(event);}); // Alternative way to add the event listener - alternatywny sposób dodania nasłuchiwania zdarzenia
+}
