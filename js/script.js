@@ -68,5 +68,36 @@ function generateTitleLinks(){ // Function to generate a list of article titles 
     link.addEventListener('click', titleClickHandler); // Add a click event listener to each link - dodaje nasłuchiwanie zdarzenia kliknięcia do każdego linku
   }
 }
-/* execute the function */
+
+const optArticleTagsSelector = '.post-tags .list'; // Selector for the tags wrapper within articles - selektor dla kontenera tagów wewnątrz artykułów
+
 generateTitleLinks(); // Call the function to generate the title links - wywołuje funkcję generateTitleLinks
+
+function generateTags(){
+  /* find all articles */
+ const articles = documents.querySelectorAll('.post'); // Select all articles with the class 'post' - wybiera wszystkie artykuły z klasą 'post'
+  /* START LOOP: for every article: */
+  for(let article of articles){ // Loop through each article - iteruje przez każdy artykuł
+    /* find tags wrapper */
+    const tagsWrapper = article.querySelector('.post-tags .list'); // Select the tags wrapper within the article - wybiera kontener tagów wewnątrz artykułu
+    /* make html variable with empty string */
+    let html = ''; // Initialize an empty string to hold the HTML for the tags - inicjalizuje pusty ciąg do przechowywania HTML dla tagów
+    /* get tags from data-tags attribute */
+    const tags = article.getAttribute('data-tags'); // Get the value of the 'data-tags' attribute from the article - pobiera wartość atrybutu 'data-tags' z artykułu
+    /* split tags into array */
+    const tagsArray = tags.split(' '); // Split the tags string into an array - dzieli ciąg tagów na tablicę
+    console.log('tagsArray:', tagsArray); // Log the tags array to the console - rejestrator tablicy tagów
+    /* START LOOP: for each tag */
+    for(let tag of tagsArray){ // Loop through each tag in the tags array - iteruje przez każdy tag w tablicy tagów
+      /* generate HTML of the link */
+      const linkHTML = `<li><a href="#tag-${tag}"><span>${tag}</span></a></li>`; // Create a link HTML string with the tag - tworzy ciąg HTML linku z tagiem
+      /* add generated code to html variable */
+      html += linkHTML; // Append the link HTML to the html variable - dodaje HTML linku do zmiennej html
+    /* END LOOP: for each tag */
+    }
+    /* insert HTML of all the links into the tags wrapper */
+    tagsWrapper.innerHTML = html; // Set the inner HTML of the tags wrapper to the generated HTML - ustawia wewnętrzny HTML kontenera tagów na wygenerowany HTML
+  /* END LOOP: for every article: */
+}
+}
+generateTags();
