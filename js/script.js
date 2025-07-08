@@ -19,7 +19,7 @@ function titleClickHandler(event){ // Function to handle click events on article
   for(let activeArticle of activeArticles){ // Loop through each active article - iteruje przez każdy aktywny artykuł
     activeArticle.classList.remove('active'); // Remove the 'active' class from the article - usuwa klasę 'active' z artykułu
   }
-  /* get 'href' attribute from the clicked link */ 
+  /* get 'href' attribute from the clicked link */
   const articleSelector = clickedElement.getAttribute('href'); // Get the value of the 'href' attribute from the clicked link - pobiera wartość atrybutu 'href' z klikniętego linku
   console.log('articleSelector:', articleSelector); // Log the article selector to the console - rejestrator selektora artykułu
   /* find the correct article using the selector (value of 'href' attribute) */
@@ -61,7 +61,7 @@ function generateTitleLinks(){ // Function to generate a list of article titles 
 
   }
   titleList.innerHTML = html; // Set the inner HTML of the title list to the generated HTML - ustawia wewnętrzny HTML listy tytułów na wygenerowany HTML
-  
+
   const links = document.querySelectorAll('.titles a'); // Select all links in the title list - wybiera wszystkie linki w liście tytułów
   console.log('links:', links); // Log the selected links to the console - rejestrator wybranych linków
   for(let link of links){ // Loop through each link - iteruje przez każdy link
@@ -70,4 +70,3 @@ function generateTitleLinks(){ // Function to generate a list of article titles 
 }
 /* execute the function */
 generateTitleLinks(); // Call the function to generate the title links - wywołuje funkcję generateTitleLinks
-
