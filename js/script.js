@@ -3,7 +3,7 @@
 function titleClickHandler(event){ // Function to handle click events on article links - funkcja obsługująca kliknięcia w linki artykułów
   event.preventDefault(); // Prevent default link behavior - zapobiega domyślnemu zachowaniu linku, czyli przeładowaniu strony
   const clickedElement = this; // 'this' refers to the clicked link - 'this' może być użyte do odwołania się do elementu, który wywołał zdarzenie
-  console.log('Link was clicked!') // Log a message to the console when a link is clicked - rejestrator kliknięcia linku
+  console.log('Link was clicked!'); // Log a message to the console when a link is clicked - rejestrator kliknięcia linku
   console.log(event); // Log the event object - rejestrator zdarzenia :)
 
   /* remove class 'active' from all article links  */
