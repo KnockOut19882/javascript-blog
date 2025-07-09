@@ -99,3 +99,48 @@ function generateTags(){
   }
 }
 generateTags();
+
+function tagClickHandler(event){
+  /* prevent default action for this event */
+  event.preventDefault(); // Prevent the default action of the event, which is to follow the link - zapobiega domyślnemu działaniu zdarzenia, czyli podążaniu za linkiem
+  /* make new constant named "clickedElement" and give it the value of "this" */
+  const clickedElement = this; // 'this' refers to the clicked link - 'this' może być użyte do odwołania się do elementu, który wywołał zdarzenie
+  console.log('Link was clicked!'); // Log a message to the console when a link is clicked - rejestrator kliknięcia linku
+  console.log(event); // Log the event object - rejestrator zdarzenia :)
+  /* make a new constant "href" and read the attribute "href" of the clicked element */
+  const href = clickedElement.getAttribute('href'); // Get the value of the 'href' attribute from the clicked link - pobiera wartość atrybutu 'href' z klikniętego linku
+  /* make a new constant "tag" and extract tag from the "href" constant */
+  const tag = href.replace('#tag-', ''); // Extract the tag from the href by removing the '#tag-' prefix - wyciąga tag z href, usuwając prefiks '#tag-'
+  /* find all tag links with class active */
+  const activeTagLinks = document.querySelectorAll('.post-tags .list a.active'); // Select all tag links with the class 'active' - wybiera wszystkie linki tagów z klasą 'active')
+  /* START LOOP: for each active tag link */
+  for(let activeTagLink of activeTagLinks){ // Loop through each active tag link - iteruje przez każdy aktywny link tagu
+    /* remove class active */
+    activeTagLink.classList.remove('active'); // Remove the 'active' class from the link - usuwa klasę 'active' z linku
+  /* END LOOP: for each active tag link */
+  }
+  /* find all tag links with "href" attribute equal to the "href" constant */
+  const tagLinks = document.querySelectorAll(`a[href="${href}"]`); // ('.post-tags .list a[href="' + href + '"]') Select all tag links with the same href as the clicked link - wybiera wszystkie linki tagów z tym samym href co kliknięty link
+  /* START LOOP: for each found tag link */
+  for(let tagLink of tagLinks){ // Loop through each found tag link - iteruje przez każdy znaleziony link tagu}
+    /* add class active */
+    tagLink.classList.add('active'); // Add the 'active' class to the link - dodaje klasę 'active' do linku)
+  /* END LOOP: for each found tag link */
+  }
+  /* execute function "generateTitleLinks" with article selector as argument */
+  generateTitleLinks(); // Call the generateTitleLinks function to update the article links based on the selected tag - wywołuje funkcję generateTitleLinks, aby zaktualizować linki artykułów na podstawie wybranego tagu
+}
+
+function addClickListenersToTags(){
+  /* find all links to tags */
+  const links = document.querySelectorAll('.post-tags .list a'); // Select all links to tags within the post-tags list - wybiera wszystkie linki do tagów w liście post-tags
+  /* START LOOP: for each link */
+  for(let link of links){ // Loop through each link - iteruje przez każdy link
+    /* add tagClickHandler as event listener for that link */
+    link.addEventListener('click', tagClickHandler); // Add a click event listener to each link that calls the tagClickHandler function - dodaje nasłuchiwanie zdarzenia kliknięcia do każdego linku, które wywołuje funkcję tagClickHandler
+    console.log('link:', link); // Log the link to the console - rejestrator linku
+  /* END LOOP: for each link */
+  }
+}
+
+addClickListenersToTags();
