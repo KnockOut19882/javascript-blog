@@ -35,14 +35,16 @@ const optArticleSelector = '.post', // Selector for articles - selektor dla arty
   optTitleListSelector = '.titles'; // Selector for the title list - selektor dla listy tytułów
 
 /* generateTitleLinks function */
-function generateTitleLinks(){ // Function to generate a list of article titles with links - funkcja generująca listę tytułów artykułów z linkami
+function generateTitleLinks(customSelector = ''){ // Function to generate a list of article titles with links - funkcja generująca listę tytułów artykułów z linkami
   console.log('generateTitleLinks function called'); // Log a message to the console when the function is called - rejestrator wywołania funkcji generateTitleLinks
   /* remove contents of titleList */
+  console.log('customSelector:', customSelector); // Log the custom selector to the console - rejestrator niestandardowego selektora
   document.querySelector(optTitleListSelector).innerHTML = ''; // Clear the title list by setting its inner HTML to an empty string - czyści listę tytułów, ustawiając jej wewnętrzny HTML na pusty ciąg
   const titleList = document.querySelector(optTitleListSelector); // Select the title list element - wybiera element listy tytułów
   /* find all the articles and save them to variable: articles */
   let html = ''; // Initialize an empty string to hold the HTML for the title links - inicjalizuje pusty ciąg do przechowywania HTML dla linków tytułów
-  const articles = document.querySelectorAll(optArticleSelector); // Select all articles using the defined selector - wybiera wszystkie artykuły za pomocą zdefiniowanego selektora
+  const articles = document.querySelectorAll(optArticleSelector + customSelector); // Select all articles using the defined selector - wybiera wszystkie artykuły za pomocą zdefiniowanego selektora
+  console.log('articles:', articles); // Log the selected articles to the console - rejestrator wybranych artykułów
   /* for each article */
   for (let article of articles){ // Loop through each article - iteruje przez każdy artykuł}
     /* get the article id */
@@ -83,7 +85,7 @@ function generateTags(){
     /* get tags from data-tags attribute */
     const tags = article.getAttribute('data-tags'); // Get the value of the 'data-tags' attribute from the article - pobiera wartość atrybutu 'data-tags' z artykułu
     /* split tags into array */
-    const tagsArray = tags.split(', '); // Split the tags string into an array - dzieli ciąg tagów na tablicę
+    const tagsArray = tags.split(' '); // Split the tags string into an array - dzieli ciąg tagów na tablicę
     console.log('tagsArray:', tagsArray); // Log the tags array to the console - rejestrator tablicy tagów
     /* START LOOP: for each tag */
     for(let tag of tagsArray){ // Loop through each tag in the tags array - iteruje przez każdy tag w tablicy tagów
@@ -100,7 +102,7 @@ function generateTags(){
 }
 generateTags();
 
-function tagClickHandler(event){
+function tagClickHandler(event){ // Function to handle click events on tag links - funkcja obsługująca kliknięcia w linki tagów
   /* prevent default action for this event */
   event.preventDefault(); // Prevent the default action of the event, which is to follow the link - zapobiega domyślnemu działaniu zdarzenia, czyli podążaniu za linkiem
   /* make new constant named "clickedElement" and give it the value of "this" */
@@ -128,7 +130,7 @@ function tagClickHandler(event){
   /* END LOOP: for each found tag link */
   }
   /* execute function "generateTitleLinks" with article selector as argument */
-  generateTitleLinks(); // Call the generateTitleLinks function to update the article links based on the selected tag - wywołuje funkcję generateTitleLinks, aby zaktualizować linki artykułów na podstawie wybranego tagu
+  generateTitleLinks('[data-tags~="' + tag + '"]'); // Call the generateTitleLinks function to update the article links based on the selected tag - wywołuje funkcję generateTitleLinks, aby zaktualizować linki artykułów na podstawie wybranego tagu
 }
 
 function addClickListenersToTags(){
@@ -145,6 +147,49 @@ function addClickListenersToTags(){
 
 addClickListenersToTags();
 
+const optArticleAuthorSelector = '.post-author'; // Selector for the author element within an article - selektor dla elementu autora wewnątrz artykułu
+
+function generateAuthors(){ // Function to generate author links for each article - funkcja generująca linki autorów dla każdego artykułu
+  const articles = document.querySelectorAll(optArticleSelector);
+  for(let article of articles){
+    const authorWrapper = article.querySelector(optArticleAuthorSelector);
+    console.log('authorWrapper:', authorWrapper);
+    const author = article.getAttribute('data-author');
+    console.log('author:', author);
+    const linkHTML = `<a href="#author-${author}"><span>${author}</span></a>`;
+    authorWrapper.innerHTML = linkHTML; // This line inserts the link into the HTML
+  }
+}
+
+generateAuthors();
+
+function authorClickHandler(event){ // Function to handle click events on author links - funkcja obsługująca kliknięcia w linki autorów
+  event.preventDefault();
+  const clickedElement = this;
+  console.log('Author link was clicked!');
+  const href = clickedElement.getAttribute('href');
+  const author = href.replace('#author-', '');
+  console.log('author:', author);
+  const authorLinks = document.querySelectorAll('.post-author a.active');
+  for(let authorLink of authorLinks){
+    authorLink.classList.remove('active');
+  }
+  const authorLink = document.querySelector(`a[href="${href}"]`);
+  if(authorLink){
+    authorLink.classList.add('active');
+  }
+  generateTitleLinks(`[data-author="${author}"]`);
+  console.log('generateTitleLinks called with author:', author);
+}
 
 
+function addClickListenersToAuthors(){
+  const links = document.querySelectorAll('.post-author a');
+  for(let link of links){
+    link.addEventListener('click', authorClickHandler);
+    console.log('link', link);
+  }
+}
+
+addClickListenersToAuthors();
 
