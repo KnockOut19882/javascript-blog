@@ -76,9 +76,11 @@ generateTitleLinks(); // Call the function to generate the title links - wywołu
 const optTagsListSelector = '.tags.list';
 
 function generateTags(){
-  let allTags = [];
+  /* [NEW] create a new variable allTags with an empty object */
+  let allTags = {};
+  console.log('generateTags function called');
   /* find all articles */
-  const articles = document.querySelectorAll(optTagsListSelector); // Select all articles with the class 'post' - wybiera wszystkie artykuły z klasą 'post'
+  const articles = document.querySelectorAll(optArticleSelector); // Select all articles with the class 'post' - wybiera wszystkie artykuły z klasą 'post'
   /* START LOOP: for every article: */
   for(let article of articles){ // Loop through each article - iteruje przez każdy artykuł
     /* find tags wrapper */
@@ -89,7 +91,7 @@ function generateTags(){
     const tags = article.getAttribute('data-tags'); // Get the value of the 'data-tags' attribute from the article - pobiera wartość atrybutu 'data-tags' z artykułu
     /* split tags into array */
     const tagsArray = tags.split(' '); // Split the tags string into an array - dzieli ciąg tagów na tablicę
-    console.log('tagsArray:', tagsArray); // Log the tags array to the console - rejestrator tablicy tagów
+    console.log('tagsArray:', tags); // Log the tags array to the console - rejestrator tablicy tagów
     /* START LOOP: for each tag */
     for(let tag of tagsArray){ // Loop through each tag in the tags array - iteruje przez każdy tag w tablicy tagów
       /* generate HTML of the link */
@@ -97,9 +99,11 @@ function generateTags(){
       /* add generated code to html variable */
       html += linkHTML; // Append the link HTML to the html variable - dodaje HTML linku do zmiennej html
       /* [NEW] check if this link is NOT already in allTags*/
-      if(allTags.indexOf(linkHTML) == -1){
+      if(!allTags.hasOwnProperty(tag)){
+        allTags[tag] = 1; 
         /* [NEW] add generated code to allTags array */
-        allTags.push(linkHTML);
+      } else {
+        allTags[tag]++;
       }
     /* END LOOP: for each tag */
     }
@@ -110,8 +114,13 @@ function generateTags(){
   /* [NEW] find list of tags in right column */
   const tagList = document.querySelector(optTagsListSelector);
   /* [NEW] add html from allTags to tagList */
-  tagList.innerHTML = allTags.join(' ');
+  let allTagsHTML = '';
+  for(let tag in allTags){
+    allTagsHTML += tag + ' (' + allTags[tag] + ') ';
+  }
+  tagList.innerHTML = allTagsHTML;
 }
+
 generateTags(); //Od modyfikacji funkcja nie działa poprawnie, nie czyta tagów z artykułów, nie działa również funkcja z autorami!!!
 
 function tagClickHandler(event){ // Function to handle click events on tag links - funkcja obsługująca kliknięcia w linki tagów
@@ -204,4 +213,3 @@ function addClickListenersToAuthors(){
 }
 
 addClickListenersToAuthors();
-
