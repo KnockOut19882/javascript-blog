@@ -73,9 +73,12 @@ function generateTitleLinks(customSelector = ''){ // Function to generate a list
 
 generateTitleLinks(); // Call the function to generate the title links - wywołuje funkcję generateTitleLinks
 
+const optTagsListSelector = '.tags.list';
+
 function generateTags(){
+  let allTags = [];
   /* find all articles */
-  const articles = document.querySelectorAll('.post'); // Select all articles with the class 'post' - wybiera wszystkie artykuły z klasą 'post'
+  const articles = document.querySelectorAll(optTagsListSelector); // Select all articles with the class 'post' - wybiera wszystkie artykuły z klasą 'post'
   /* START LOOP: for every article: */
   for(let article of articles){ // Loop through each article - iteruje przez każdy artykuł
     /* find tags wrapper */
@@ -93,14 +96,23 @@ function generateTags(){
       const linkHTML = `<li><a href="#tag-${tag}"><span>${tag}</span></a></li>`; // Create a link HTML string with the tag - tworzy ciąg HTML linku z tagiem
       /* add generated code to html variable */
       html += linkHTML; // Append the link HTML to the html variable - dodaje HTML linku do zmiennej html
+      /* [NEW] check if this link is NOT already in allTags*/
+      if(allTags.indexOf(linkHTML) == -1){
+        /* [NEW] add generated code to allTags array */
+        allTags.push(linkHTML);
+      }
     /* END LOOP: for each tag */
     }
     /* insert HTML of all the links into the tags wrapper */
     tagsWrapper.innerHTML = html; // Set the inner HTML of the tags wrapper to the generated HTML - ustawia wewnętrzny HTML kontenera tagów na wygenerowany HTML
   /* END LOOP: for every article: */
   }
+  /* [NEW] find list of tags in right column */
+  const tagList = document.querySelector(optTagsListSelector);
+  /* [NEW] add html from allTags to tagList */
+  tagList.innerHTML = allTags.join(' ');
 }
-generateTags();
+generateTags(); //Od modyfikacji funkcja nie działa poprawnie, nie czyta tagów z artykułów, nie działa również funkcja z autorami!!!
 
 function tagClickHandler(event){ // Function to handle click events on tag links - funkcja obsługująca kliknięcia w linki tagów
   /* prevent default action for this event */
@@ -156,7 +168,7 @@ function generateAuthors(){ // Function to generate author links for each articl
     console.log('authorWrapper:', authorWrapper);
     const author = article.getAttribute('data-author');
     console.log('author:', author);
-    const linkHTML = `<a href="#author-${author}"><span>${author}</span></a>`;
+    const linkHTML = `<a href="#author-${author}"><span>${author}</span></a>`; // Create a link HTML string with the author's name - tworzy ciąg HTML linku z imieniem autora
     authorWrapper.innerHTML = linkHTML; // This line inserts the link into the HTML
   }
 }
@@ -165,12 +177,12 @@ generateAuthors();
 
 function authorClickHandler(event){ // Function to handle click events on author links - funkcja obsługująca kliknięcia w linki autorów
   event.preventDefault();
-  const clickedElement = this;
+  const clickedElement = this; //Czy ta stała jest potrzebna?
   console.log('Author link was clicked!');
   const href = clickedElement.getAttribute('href');
-  const author = href.replace('#author-', '');
+  const author = href.replace('#author-', ''); //Czy #author- tyczy się data-attribute data-author?
   console.log('author:', author);
-  const authorLinks = document.querySelectorAll('.post-author a.active');
+  const authorLinks = document.querySelectorAll('.post-author a');
   for(let authorLink of authorLinks){
     authorLink.classList.remove('active');
   }
