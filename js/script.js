@@ -32,7 +32,9 @@ function titleClickHandler(event){ // Function to handle click events on article
 
 const optArticleSelector = '.post', // Selector for articles - selektor dla artykułów
   optTitleSelector = '.post-title', // Selector for article titles - selektor dla tytułów artykułów
-  optTitleListSelector = '.titles'; // Selector for the title list - selektor dla listy tytułów
+  optTitleListSelector = '.titles', // Selector for the title list - selektor dla listy tytułów
+  optCloudClassCount = 5,
+  optCloudClassPrefix = 'tag-size-';
 
 /* generateTitleLinks function */
 function generateTitleLinks(customSelector = ''){ // Function to generate a list of article titles with links - funkcja generująca listę tytułów artykułów z linkami
@@ -73,6 +75,19 @@ function generateTitleLinks(customSelector = ''){ // Function to generate a list
 
 generateTitleLinks(); // Call the function to generate the title links - wywołuje funkcję generateTitleLinks
 
+function calculateTagsParams(tags){
+  const params = {max: 0, min: 999999};
+  for(let tag in tags){
+    console.log(tag + ' is used ' + tags[tag] + ' times');
+    if(tags[tag] > params.max) params.max = tags[tag];
+    if(tags[tag] < params.min) params.min = tags[tag];
+  }
+  return params;
+}
+
+function calculateTagClass(count, params){
+  
+
 const optTagsListSelector = '.tags.list';
 
 function generateTags(){
@@ -100,7 +115,7 @@ function generateTags(){
       html += linkHTML; // Append the link HTML to the html variable - dodaje HTML linku do zmiennej html
       /* [NEW] check if this link is NOT already in allTags*/
       if(!allTags.hasOwnProperty(tag)){
-        allTags[tag] = 1; 
+        allTags[tag] = 1;
         /* [NEW] add generated code to allTags array */
       } else {
         allTags[tag]++;
@@ -114,12 +129,18 @@ function generateTags(){
   /* [NEW] find list of tags in right column */
   const tagList = document.querySelector(optTagsListSelector);
   /* [NEW] add html from allTags to tagList */
+  const params = calculateTagsParams(allTags);
+  console.log('params:', params);
   let allTagsHTML = '';
   for(let tag in allTags){
-    allTagsHTML += tag + ' (' + allTags[tag] + ') ';
+    allTagsHTML += tagLinkHTML;
+    const tagLinkHTML = '<li>' + calculateTagClass(allTags[tag], params) + '</li>';
+    console.log('tagLinkHTML:', tagLinkHTML);
   }
   tagList.innerHTML = allTagsHTML;
 }
+
+calculateTagClass(count i params);
 
 generateTags(); //Od modyfikacji funkcja nie działa poprawnie, nie czyta tagów z artykułów, nie działa również funkcja z autorami!!!
 
