@@ -1,5 +1,16 @@
 'use strict';
 
+const opts = {
+  articleSelector: '.post',
+  titleSelector: '.post-title',
+  titleListSelector: '.titles',
+  tagsListSelector: '.tags.list',
+  cloudClassCount: 5,
+  cloudClassPrefix: 'tag-size-',
+  authorsListSelector: '.authors',
+  articleAuthorSelector: '.post-author'
+}
+
 function titleClickHandler(event){ // Function to handle click events on article links - funkcja obsługująca kliknięcia w linki artykułów
   event.preventDefault(); // Prevent default link behavior - zapobiega domyślnemu zachowaniu linku, czyli przeładowaniu strony
   const clickedElement = this; // 'this' refers to the clicked link - 'this' może być użyte do odwołania się do elementu, który wywołał zdarzenie
@@ -21,45 +32,40 @@ function titleClickHandler(event){ // Function to handle click events on article
   }
   /* get 'href' attribute from the clicked link */
   const articleSelector = clickedElement.getAttribute('href'); // Get the value of the 'href' attribute from the clicked link - pobiera wartość atrybutu 'href' z klikniętego linku
-  console.log('articleSelector:', articleSelector); // Log the article selector to the console - rejestrator selektora artykułu
+  console.log('opts.articleSelector:', opts.articleSelector); // Log the article selector to the console - rejestrator selektora artykułu
   /* find the correct article using the selector (value of 'href' attribute) */
-  const targetArticle = document.querySelector(articleSelector); // Find the article that matches the selector - znajduje artykuł, który pasuje do selektora
+  const targetArticle = document.querySelector(opts.articleSelector); // Find the article that matches the selector - znajduje artykuł, który pasuje do selektora
   console.log('targetArticle:', targetArticle); // Log the target article to the console - rejestrator docelowego artykułu
   /* add class 'active' to the correct article */
   targetArticle.classList.add('active'); // Add the 'active' class to the target article - dodaje klasę 'active' do docelowego artykułu
   console.log('targetArticle.classList:', targetArticle.classList); // Log the class list of the target article - rejestrator listy klas docelowego artykułu
 }
 
-const optArticleSelector = '.post', // Selector for articles - selektor dla artykułów
-  optTitleSelector = '.post-title', // Selector for article titles - selektor dla tytułów artykułów
-  optTitleListSelector = '.titles', // Selector for the title list - selektor dla listy tytułów
-  optTagsListSelector = '.tags.list',
-  optCloudClassCount = 5,
-  optCloudClassPrefix = 'tag-size-';
+
 
 /* generateTitleLinks function */
 function generateTitleLinks(customSelector = ''){ // Function to generate a list of article titles with links - funkcja generująca listę tytułów artykułów z linkami
   console.log('generateTitleLinks function called'); // Log a message to the console when the function is called - rejestrator wywołania funkcji generateTitleLinks
   /* remove contents of titleList */
   console.log('customSelector:', customSelector); // Log the custom selector to the console - rejestrator niestandardowego selektora
-  document.querySelector(optTitleListSelector).innerHTML = ''; // Clear the title list by setting its inner HTML to an empty string - czyści listę tytułów, ustawiając jej wewnętrzny HTML na pusty ciąg
-  const titleList = document.querySelector(optTitleListSelector); // Select the title list element - wybiera element listy tytułów
+  document.querySelector(opts.titleListSelector).innerHTML = ''; // Clear the title list by setting its inner HTML to an empty string - czyści listę tytułów, ustawiając jej wewnętrzny HTML na pusty ciąg
+  const titleList = document.querySelector(opts.titleListSelector); // Select the title list element - wybiera element listy tytułów
   /* find all the articles and save them to variable: articles */
   let html = ''; // Initialize an empty string to hold the HTML for the title links - inicjalizuje pusty ciąg do przechowywania HTML dla linków tytułów
-  const articles = document.querySelectorAll(optArticleSelector + customSelector); // Select all articles using the defined selector - wybiera wszystkie artykuły za pomocą zdefiniowanego selektora
+  const articles = document.querySelectorAll(opts.articleSelector + customSelector); // Select all articles using the defined selector - wybiera wszystkie artykuły za pomocą zdefiniowanego selektora
   console.log('articles:', articles); // Log the selected articles to the console - rejestrator wybranych artykułów
   /* for each article */
   for (let article of articles){ // Loop through each article - iteruje przez każdy artykuł}
     /* get the article id */
     const articleId = article.getAttribute('id'); // Get the 'id' attribute of the article - pobiera atrybut 'id' artykułu
     /* find the title element */
-    const titleElement = article.querySelector(optTitleSelector); // Select the title element within the article - wybiera element tytułu wewnątrz artykułu
+    const titleElement = article.querySelector(opts.titleSelector); // Select the title element within the article - wybiera element tytułu wewnątrz artykułu
     /* get the title from the title element */
     const articleTitle = titleElement.innerHTML; // Get the inner HTML of the title element - pobiera wewnętrzny HTML elementu tytułu
     /* create HTML of the link */
     const linkHTML = `<li><a href="#${articleId}"><span>${articleTitle}</span></a></li>`; // Create a link HTML string with the article ID and title - tworzy ciąg HTML linku z ID artykułu i tytułem
     /* insert link into titleList */
-    document.querySelector(optTitleListSelector).insertAdjacentHTML('beforeend', linkHTML); // Insert the link HTML into the title list - wstawia HTML linku do listy tytułów
+    document.querySelector(opts.titleListSelector).insertAdjacentHTML('beforeend', linkHTML); // Insert the link HTML into the title list - wstawia HTML linku do listy tytułów
     /* insert link into html variable */
     html = html + linkHTML;
     console.log('html:', html); // Log the generated HTML to the console - rejestrator wygenerowanego HTML
@@ -90,7 +96,7 @@ function calculateTagClass(count, params){
   const normalizedCount = count - params.min;
   const normalizedMax = params.max - params.min;
   const percentage = normalizedCount / normalizedMax;
-  const classNumber = Math.floor( percentage * (optCloudClassCount - 1) + 1 );
+  const classNumber = Math.floor( percentage * (opts.cloudClassCount - 1) + 1 );
   return classNumber;
 }
 
@@ -101,7 +107,7 @@ function generateTags(){
   let allTags = {};
   console.log('generateTags function called');
   /* find all articles */
-  const articles = document.querySelectorAll(optArticleSelector); // Select all articles with the class 'post' - wybiera wszystkie artykuły z klasą 'post'
+  const articles = document.querySelectorAll(opts.articleSelector); // Select all articles with the class 'post' - wybiera wszystkie artykuły z klasą 'post'
   /* START LOOP: for every article: */
   for(let article of articles){ // Loop through each article - iteruje przez każdy artykuł
     /* find tags wrapper */
@@ -133,14 +139,14 @@ function generateTags(){
   /* END LOOP: for every article: */
   }
   /* [NEW] find list of tags in right column */
-  const tagList = document.querySelector(optTagsListSelector);
+  const tagList = document.querySelector(opts.tagsListSelector);
   /* [NEW] add html from allTags to tagList */
   const tagsParams = calculateTagsParams(allTags);
   console.log('tagsParams:', tagsParams);
   let allTagsHTML = '';
   for(let tag in allTags){
     const classNumber = calculateTagClass(allTags[tag], tagsParams);
-    const className = optCloudClassPrefix + classNumber;
+    const className = opts.cloudClassPrefix + classNumber;
     const tagLinkHTML = `<li><a href="#tag-${tag}" class="${className}">${tag}</a></li>`;
     allTagsHTML += tagLinkHTML;
     console.log('tagLinkHTML:', tagLinkHTML);
@@ -198,18 +204,32 @@ function addClickListenersToTags(){
 
 addClickListenersToTags();
 
-const optArticleAuthorSelector = '.post-author'; // Selector for the author element within an article - selektor dla elementu autora wewnątrz artykułu
 
 function generateAuthors(){ // Function to generate author links for each article - funkcja generująca linki autorów dla każdego artykułu
-  const articles = document.querySelectorAll(optArticleSelector);
+  let allAuthors = {};
+  const articles = document.querySelectorAll(opts.articleSelector);
   for(let article of articles){
-    const authorWrapper = article.querySelector(optArticleAuthorSelector);
+    const authorWrapper = article.querySelector(opts.articleAuthorSelector);
     console.log('authorWrapper:', authorWrapper);
     const author = article.getAttribute('data-author');
     console.log('author:', author);
     const linkHTML = `<a href="#author-${author}"><span>${author}</span></a>`; // Create a link HTML string with the author's name - tworzy ciąg HTML linku z imieniem autora
     authorWrapper.innerHTML = linkHTML; // This line inserts the link into the HTML
+    if(!allAuthors.hasOwnProperty(author)){
+      allAuthors[author] = 1;
+    } else {
+      allAuthors[author]++;
+    }
   }
+  const authorsList = document.querySelector(opts.authorsListSelector);
+  let allAuthorsHTML = '';
+  for(let author in allAuthors){
+    const authorLinkHTML = `<li><a href="#author-${author}"><span>${author}</span></a> (${allAuthors[author]})</li>`; // Create a link HTML string with the author's name and count - tworzy ciąg HTML linku z imieniem autora i liczbą wystąpień
+    allAuthorsHTML += authorLinkHTML; // Append the author link HTML to the allAuthorsHTML variable - dodaje HTML linku autora do zmiennej allAuthorsHTML
+    console.log('authorLinkHTML:', authorLinkHTML); // Log the author link HTML to the console - rejestrator HTML linku autora
+  }
+  authorsList.innerHTML = allAuthorsHTML; // Set the inner HTML of the authors list to the generated author links - ustawia wewnętrzny HTML listy autorów na wygenerowane linki autorów
+  console.log('allAuthorsHTML:', allAuthorsHTML); // Log the generated author links HTML
 }
 
 generateAuthors();
@@ -221,25 +241,26 @@ function authorClickHandler(event){ // Function to handle click events on author
   const href = clickedElement.getAttribute('href');
   const author = href.replace('#author-', ''); //Czy #author- tyczy się data-attribute data-author?
   console.log('author:', author);
-  const authorLinks = document.querySelectorAll('.post-author a');
-  for(let authorLink of authorLinks){
-    authorLink.classList.remove('active');
+  // Usuń klasę active ze wszystkich linków autorów
+  const activeAuthorLinks = document.querySelectorAll('.authors a.active');
+  for(let activeAuthorLink of activeAuthorLinks){
+    activeAuthorLink.classList.remove('active');
   }
-  const authorLink = document.querySelector(`a[href="${href}"]`);
-  if(authorLink){
+  // Dodaj klasę active do klikniętego autora
+  const authorLinks = document.querySelectorAll(`a[href="${href}"]`);
+  for(let authorLink of authorLinks){
     authorLink.classList.add('active');
   }
+  // Pokaż tylko artykuły tego autora
   generateTitleLinks(`[data-author="${author}"]`);
-  console.log('generateTitleLinks called with author:', author);
 }
-
 
 function addClickListenersToAuthors(){
-  const links = document.querySelectorAll('.post-author a');
+  const links = document.querySelectorAll('.authors a');
   for(let link of links){
     link.addEventListener('click', authorClickHandler);
-    console.log('link', link);
   }
 }
+
 
 addClickListenersToAuthors();
