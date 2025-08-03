@@ -80,8 +80,8 @@ function calculateTagsParams(tags){
   const params = {max: 0, min: 999999};
   for(let tag in tags){
     console.log(tag + ' is used ' + tags[tag] + ' times');
-    if(tags[tag] > params.max) params.max = tags[tag];
-    if(tags[tag] < params.min) params.min = tags[tag];
+    params.max = Math.max(tags[tag], params.max);
+    params.min = Math.min(tags[tag], params.min);
   }
   return params;
 }
@@ -135,21 +135,23 @@ function generateTags(){
   /* [NEW] find list of tags in right column */
   const tagList = document.querySelector(optTagsListSelector);
   /* [NEW] add html from allTags to tagList */
-  const params = calculateTagsParams(allTags);
-  console.log('params:', params);
+  const tagsParams = calculateTagsParams(allTags);
+  console.log('tagsParams:', tagsParams);
   let allTagsHTML = '';
   for(let tag in allTags){
-    const className = optCloudClassPrefix + calculateTagClass(allTags[tag], params);
+    const classNumber = calculateTagClass(allTags[tag], tagsParams);
+    const className = optCloudClassPrefix + classNumber;
     const tagLinkHTML = `<li><a href="#tag-${tag}" class="${className}">${tag}</a></li>`;
     allTagsHTML += tagLinkHTML;
     console.log('tagLinkHTML:', tagLinkHTML);
   }
+  //[END LOOP: for each tag in allTags]
+
+  /* [NEW] add html from allTags to tagList */
   tagList.innerHTML = allTagsHTML;
 }
 
-calculateTagClass();
-
-generateTags(); //Od modyfikacji funkcja nie działa poprawnie, nie czyta tagów z artykułów, nie działa również funkcja z autorami!!!
+generateTags();
 
 function tagClickHandler(event){ // Function to handle click events on tag links - funkcja obsługująca kliknięcia w linki tagów
   /* prevent default action for this event */
@@ -184,7 +186,7 @@ function tagClickHandler(event){ // Function to handle click events on tag links
 
 function addClickListenersToTags(){
   /* find all links to tags */
-  const links = document.querySelectorAll('.post-tags .list a'); // Select all links to tags within the post-tags list - wybiera wszystkie linki do tagów w liście post-tags
+  const links = document.querySelectorAll('a[href^="#tag-"]'); // Select all links to tags within the post-tags list - wybiera wszystkie linki do tagów w liście post-tags
   /* START LOOP: for each link */
   for(let link of links){ // Loop through each link - iteruje przez każdy link
     /* add tagClickHandler as event listener for that link */
