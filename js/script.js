@@ -9,13 +9,14 @@ const opts = {
   cloudClassPrefix: 'tag-size-',
   authorsListSelector: '.authors',
   articleAuthorSelector: '.post-author'
-}
+};
 
 const templates = {
   articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML),
   tagLink: Handlebars.compile(document.querySelector('#template-tag-link').innerHTML),
-  authorLink: Handlebars.compile(document.querySelector('#template-author-link').innerHTML)
-}
+  authorLink: Handlebars.compile(document.querySelector('#template-author-link').innerHTML),
+  tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML)
+};
 
 function titleClickHandler(event){ // Function to handle click events on article links - funkcja obsługująca kliknięcia w linki artykułów
   event.preventDefault(); // Prevent default link behavior - zapobiega domyślnemu zachowaniu linku, czyli przeładowaniu strony
@@ -123,7 +124,7 @@ function generateTags(){
     if (!tagsWrapper) {
       console.error('Nie znaleziono tagsWrapper dla artykułu:', article);
       return;
-}
+    }
     /* make html variable with empty string */
     let html = ''; // Initialize an empty string to hold the HTML for the tags - inicjalizuje pusty ciąg do przechowywania HTML dla tagów
     /* get tags from data-tags attribute */
@@ -156,18 +157,26 @@ function generateTags(){
   /* [NEW] add html from allTags to tagList */
   const tagsParams = calculateTagsParams(allTags);
   console.log('tagsParams:', tagsParams);
-  let allTagsHTML = '';
+  const allTagsData = {
+    tags: [],
+    //cloudClassPrefix: opts.cloudClassPrefix
+  };
   for(let tag in allTags){
     const classNumber = calculateTagClass(allTags[tag], tagsParams);
     const className = opts.cloudClassPrefix + classNumber;
     const tagLinkHTML = `<li><a href="#tag-${tag}" class="${className}">${tag}</a></li>`;
-    allTagsHTML += tagLinkHTML;
+    allTagsData.tags.push({
+      tag: tag,
+      count: allTags[tag],
+      className: calculateTagClass(allTags[tag], tagsParams)
+    });
     console.log('tagLinkHTML:', tagLinkHTML);
   }
   //[END LOOP: for each tag in allTags]
 
   /* [NEW] add html from allTags to tagList */
-  tagList.innerHTML = allTagsHTML;
+  tagList.innerHTML = templates.tagCloudLink(allTagsData);
+  console.log('allTagsData:', allTagsData);
 }
 
 generateTags();

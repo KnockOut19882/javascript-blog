@@ -114,7 +114,7 @@ body {
 }
 
 .tags.list li {
-  display: inline-block;
+  display: inline;
   margin: 5px;
 }
 
