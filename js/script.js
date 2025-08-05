@@ -15,7 +15,8 @@ const templates = {
   articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML),
   tagLink: Handlebars.compile(document.querySelector('#template-tag-link').innerHTML),
   authorLink: Handlebars.compile(document.querySelector('#template-author-link').innerHTML),
-  tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML)
+  tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML),
+  authorLinkSidebar: Handlebars.compile(document.querySelector('#template-author-link-sidebar').innerHTML)
 };
 
 function titleClickHandler(event){ // Function to handle click events on article links - funkcja obsługująca kliknięcia w linki artykułów
@@ -159,7 +160,7 @@ function generateTags(){
   console.log('tagsParams:', tagsParams);
   const allTagsData = {
     tags: [],
-    //cloudClassPrefix: opts.cloudClassPrefix
+    cloudClassPrefix: opts.cloudClassPrefix
   };
   for(let tag in allTags){
     const classNumber = calculateTagClass(allTags[tag], tagsParams);
@@ -245,14 +246,17 @@ function generateAuthors(){ // Function to generate author links for each articl
     }
   }
   const authorsList = document.querySelector(opts.authorsListSelector);
-  let allAuthorsHTML = '';
+  const allAuthorsData = { authors: [] };
   for(let author in allAuthors){
     const authorLinkHTML = `<li><a href="#author-${author}"><span>${author}</span> (${allAuthors[author]})</a></li>`; // Create a link HTML string with the author's name and count - tworzy ciąg HTML linku z imieniem autora i liczbą wystąpień
-    allAuthorsHTML += authorLinkHTML; // Append the author link HTML to the allAuthorsHTML variable - dodaje HTML linku autora do zmiennej allAuthorsHTML
+    allAuthorsData.authors.push({
+      author: author,
+      count: allAuthors[author]
+    });
     console.log('authorLinkHTML:', authorLinkHTML); // Log the author link HTML to the console - rejestrator HTML linku autora
   }
-  authorsList.innerHTML = allAuthorsHTML; // Set the inner HTML of the authors list to the generated author links - ustawia wewnętrzny HTML listy autorów na wygenerowane linki autorów
-  console.log('allAuthorsHTML:', allAuthorsHTML); // Log the generated author links HTML
+  authorsList.innerHTML = templates.authorLinkSidebar(allAuthorsData); // Set the inner HTML of the authors list to the generated author links - ustawia wewnętrzny HTML listy autorów na wygenerowane linki autorów
+  console.log('allAuthorsData:', allAuthorsData); // Log the generated author links HTML
 }
 
 generateAuthors();
